@@ -1,0 +1,488 @@
+# Faftech Backend - LLM Context File
+# Version: 1.0.0
+# Last Updated: 2025-02-09
+# Description: Comprehensive backend API for Faftech Portfolio with Next.js and Supabase
+
+## Overview
+
+Faftech Backend is a comprehensive REST API built with Next.js 14 and Supabase, serving a personal portfolio website. It provides endpoints for managing projects, articles, experiences, skills, achievements, and user authentication.
+
+## Base URL
+
+- **Development**: `http://localhost:3001`
+- **Production**: `https://faftech-be.vercel.app`
+- **API Version**: `/api/v1`
+
+## Authentication
+
+### Public Endpoints
+Most read endpoints are public and require no authentication:
+- GET /api/v1/projects
+- GET /api/v1/articles
+- GET /api/v1/experiences
+- GET /api/v1/skills
+- GET /api/v1/profile
+- GET /api/v1/contact
+- GET /api/v1/achievements
+
+### Protected Endpoints
+Admin endpoints require Bearer token authentication:
+```
+Authorization: Bearer <access_token>
+```
+
+### Login
+```http
+POST /api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@faftech.com",
+  "password": "admin123456"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "uuid",
+      "email": "admin@faftech.com",
+      "role": "admin"
+    },
+    "session": {
+      "access_token": "jwt-token",
+      "refresh_token": "refresh-token",
+      "expires_at": 1234567890
+    }
+  },
+  "message": "Login successful"
+}
+```
+
+## API Endpoints
+
+### Projects
+
+**Public:**
+- `GET /api/v1/projects` - List all active projects
+- `GET /api/v1/projects?slug={slug}` - Get single project
+- `GET /api/v1/projects/{slug}` - Get project by slug
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid",
+      "slug": "uixo",
+      "title": "UIXO",
+      "category": "Website | AI",
+      "tags": ["vite", "react", "typescript", "tailwind"],
+      "url": "https://uixo.vercel.app",
+      "image": "/uixo/PreviewPC.jpg",
+      "logo": "/uixo/logo-nobg.png",
+      "content": [
+        {
+          "name": "About",
+          "quote": "UIXO is an AI-powered application...",
+          "image_url": "/uixo/Prompt.jpg"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Admin:**
+- `GET /api/v1/admin/projects` - List all projects
+- `POST /api/v1/admin/projects` - Create project
+- `PUT /api/v1/admin/projects/{id}` - Update project
+- `DELETE /api/v1/admin/projects/{id}` - Delete project
+
+### Articles
+
+**Public:**
+- `GET /api/v1/articles` - List all articles
+- `GET /api/v1/articles/{slug}` - Get single article
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid",
+      "slug": "article-slug",
+      "title": "Article Title",
+      "href": "https://external-link.com",
+      "image_url": "https://image-url.com",
+      "published_date": "2024-08-05",
+      "author": "Fikri AF",
+      "summary": "Brief summary...",
+      "category": "Category Name",
+      "is_new": true
+    }
+  ]
+}
+```
+
+**Admin:**
+- `GET /api/v1/admin/articles`
+- `POST /api/v1/admin/articles`
+- `PUT /api/v1/admin/articles/{id}`
+- `DELETE /api/v1/admin/articles/{id}`
+
+### Experiences
+
+**Public:**
+- `GET /api/v1/experiences` - List all experiences with images
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid",
+      "date_range": "Jul 2025 - Present",
+      "title": "AI Engineer",
+      "company": "Daemon Protocol",
+      "type": "Job",
+      "type_time": "Part-time",
+      "description": [
+        "Integrated the Cerebras model into a dedicated AI processing endpoint.",
+        "Developed an AI system capable of distinguishing between risky and normal transactions.",
+        "Implemented streaming output for real-time analysis on the analyzer backend.",
+        "Generated automated PDF reports within the risk engine backend.",
+        "Connected the analyzer backend with the frontend, enabling direct access for end-users.",
+        "Prepared integration with multiple external services to enhance risk detection accuracy.",
+        "Designed the foundation for a multi-agent system with specialized agents."
+      ],
+      "skills": ["Python", "AI/ML", "Cerebras", "API Integration", "Multi-Agent Systems", "Risk Analysis"]
+    },
+    {
+      "id": "uuid",
+      "date_range": "Jun 2025 - Agu 2025",
+      "title": "Front-End Developer (Website Company Profile UPJ)",
+      "company": "KHI - Universitas Pembangunan Jaya",
+      "type": "Internship",
+      "type_time": "Full-time",
+      "description": [
+        "Contributed to the UI/UX improvement of UPJ's official website (upj.ac.id).",
+        "Reviewed and reported layout inconsistencies and responsive design issues.",
+        "Provided recommendations to improve visual structure of various static pages.",
+        "Focused on enhancing user accessibility and experience across desktop and mobile views."
+      ],
+      "skills": ["CMS", "HTML", "CSS", "JS", "Figma"],
+      "images": [
+        { "image_url": "/experience/magang_1000045418.jpg" },
+        { "image_url": "/experience/magang_1000045420.jpg" }
+      ]
+    }
+  ]
+}
+```
+
+**Admin:**
+- `GET /api/v1/admin/experiences`
+- `POST /api/v1/admin/experiences`
+- `PUT /api/v1/admin/experiences/{id}`
+- `DELETE /api/v1/admin/experiences/{id}`
+
+### Skills
+
+**Public:**
+- `GET /api/v1/skills` - List all skill categories with skills and proficiencies
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid",
+      "name": "Languages",
+      "icon": "FaCode",
+      "skills": [
+        {
+          "name": "Python",
+          "icon_url": "https://icon-url.com",
+          "proficiencies": [{ "percent": 95 }]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Admin:**
+- `GET /api/v1/admin/skills`
+- `POST /api/v1/admin/skills` (type: category|skill|proficiency)
+- `PUT /api/v1/admin/skills/{id}`
+- `DELETE /api/v1/admin/skills/{id}`
+
+### Profile
+
+**Public:**
+- `GET /api/v1/profile` - Get profile information
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "name": "Fikri Armia Fahmi",
+    "title": "Full-Stack Developer & AI Engineer",
+    "bio": "I am a passionate and versatile software developer...",
+    "email": "fikriarmia27@gmail.com",
+    "phone": "+62 8953 4850 5284",
+    "address": "Jl. Cendrawasih VI, Sawah Baru, Ciputat",
+    "avatar_url": "/fikri.jpg",
+    "cv_url": "https://cv-url.com"
+  }
+}
+```
+
+**Admin:**
+- `GET /api/v1/admin/profile`
+- `PUT /api/v1/admin/profile`
+
+### Contact & Social Links
+
+**Public:**
+- `GET /api/v1/contact` - Get contact info and social links
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "contact": {
+      "email": "fikriarmia27@gmail.com",
+      "phone": "+62 8953 4850 5284",
+      "address": "Jl. Cendrawasih VI, Sawah Baru, Ciputat",
+      "whatsapp_url": "https://wa.me/62895348505284"
+    },
+    "socialLinks": [
+      {
+        "platform": "GitHub",
+        "url": "https://github.com/fikriaf",
+        "icon": "fab fa-github"
+      }
+    ]
+  }
+}
+```
+
+**Admin:**
+- `GET /api/v1/admin/contact`
+- `PUT /api/v1/admin/contact`
+- `POST /api/v1/admin/contact/social` (add social link)
+
+### Achievements
+
+**Public:**
+- `GET /api/v1/achievements` - List all achievements
+- `GET /api/v1/achievements?type={type}` - Filter by type
+- `GET /api/v1/achievements?category={category}` - Filter by category
+- `GET /api/v1/achievements?featured=true` - Get featured only
+- `GET /api/v1/achievements/{slug}` - Get single achievement
+
+**Query Parameters:**
+- `type`: certificate | award | publication | patent | conference
+- `category`: Deep Learning | Project Management | Cyber Security | etc.
+- `featured`: true | false
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid",
+      "title": "Deep Learning for Computer Vision Specialization",
+      "slug": "ibm-deep-learning-computer-vision-specialization",
+      "description": "Complete specialization covering...",
+      "issuer": "Coursera & IBM",
+      "issue_date": "2025-01-15",
+      "category": "Deep Learning",
+      "type": "certificate",
+      "certificate_file_url": "https://storage-url.com/file.pdf",
+      "is_featured": true
+    }
+  ]
+}
+```
+
+**Admin:**
+- `GET /api/v1/admin/achievements`
+- `POST /api/v1/admin/achievements` (multipart/form-data with file)
+- `PUT /api/v1/admin/achievements/{id}` (multipart/form-data with file)
+- `DELETE /api/v1/admin/achievements/{id}`
+
+**Upload with File:**
+```bash
+curl -X POST http://localhost:3001/api/v1/admin/achievements \
+  -H "Authorization: Bearer TOKEN" \
+  -F "slug=new-certificate" \
+  -F "title=New Certificate" \
+  -F "type=certificate" \
+  -F "certificate_file=@/path/to/file.pdf"
+```
+
+## Data Statistics
+
+### Current Data Count:
+- **Projects**: 14 (UIXO, MCP Laravel UI, AssistMind AI, Music API, AI Vision, GPALytics, Wekker, AI Smart Waste, AI Realtime Discussion, AI Driving Car, Face Detect, EncoAI, BaseOfAI, Analyze TikTok Web3)
+- **Articles**: 15 (OSC Medcom, Kumparan, Geotimes, GNFI)
+- **Experiences**: 5 (AI Engineer, Front-End Developer Internship, Robotic Engineer, Frontend Internship, Academic Division)
+- **Skill Categories**: 6 (Languages, Frontend, Backend, Database, Tools, Design)
+- **Skills**: 36 technologies
+- **Proficiencies**: 18 skill ratings
+- **Achievements**: 54+ (Certificates, Patents, Conferences)
+- **Social Links**: 5 (GitHub, Instagram, LinkedIn, OSC, Discord)
+
+### Achievement Categories:
+- Coursera - Deep Learning: 4
+- Coursera - Project Management: 9
+- Coursera - Technical: 25
+- Coursera - Sustainability: 3
+- Other Courses: 6
+- Patents: 1
+- Conferences: 2
+
+## Database Schema
+
+### Tables:
+1. **profile** - Personal information
+2. **social_links** - Social media links
+3. **contact_info** - Contact details
+4. **projects** - Portfolio projects
+5. **project_content** - Project sections
+6. **articles** - Published articles
+7. **experiences** - Work experiences
+8. **experience_images** - Experience photos
+9. **skill_categories** - Skill categories
+10. **skills** - Technologies/tools
+11. **skill_proficiencies** - Skill percentages
+12. **achievements** - Certificates, awards, patents
+13. **user_roles** - Admin roles
+
+### Storage Buckets:
+- **certificates** - PDF certificates and files
+
+## Technology Stack
+
+- **Framework**: Next.js 14
+- **Language**: TypeScript
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **File Storage**: Supabase Storage
+- **Validation**: Zod
+- **CORS**: Enabled for all origins
+
+## Error Responses
+
+All errors follow this format:
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Error description",
+    "code": "ERROR_CODE",
+    "details": {}
+  }
+}
+```
+
+Common HTTP Status Codes:
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request (validation error)
+- `401` - Unauthorized (no/invalid token)
+- `403` - Forbidden (not admin)
+- `404` - Not Found
+- `500` - Server Error
+
+## Environment Variables
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xopkodtqgilhrcmcupcb.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+## Scripts
+
+```bash
+# Development
+npm run dev
+
+# Build
+npm run build
+
+# Create admin user
+npm run create-admin
+
+# Seed database
+npm run seed
+
+# Upload certificates
+npm run upload-certificates
+```
+
+## Security
+
+- **RLS Policies**: Row Level Security enabled on all tables
+- **Public Access**: Read-only access to active data
+- **Admin Access**: Full CRUD with Bearer token authentication
+- **File Upload**: Service Role Key required for storage operations
+- **CORS**: Configured for cross-origin requests
+
+## File Structure
+
+```
+faftech-be/
+├── src/
+│   ├── app/
+│   │   └── api/v1/           # API routes
+│   │       ├── auth/         # Login, logout, me
+│   │       ├── projects/     # Projects endpoints
+│   │       ├── articles/     # Articles endpoints
+│   │       ├── experiences/  # Experiences endpoints
+│   │       ├── skills/       # Skills endpoints
+│   │       ├── profile/      # Profile endpoints
+│   │       ├── contact/      # Contact endpoints
+│   │       ├── achievements/ # Achievements endpoints
+│   │       └── admin/        # Admin CRUD endpoints
+│   └── lib/
+│       ├── supabase/         # Supabase clients
+│       ├── middleware/       # Auth & validation
+│       ├── api/              # Response utilities
+│       ├── storage/          # File upload utilities
+│       └── database.types.ts # TypeScript types
+├── supabase/
+│   └── migrations/           # SQL migrations
+├── scripts/                  # Utility scripts
+└── docs/                     # Documentation
+```
+
+## Contact
+
+- **Developer**: Fikri Armia Fahmi
+- **Email**: fikriarmia27@gmail.com
+- **GitHub**: https://github.com/fikriaf
+- **LinkedIn**: https://linkedin.com/in/fikri-armia-fahmi-b373b3288
+
+## License
+
+MIT License - Fikri Armia Fahmi © 2024
+
+---
+
+*This file is intended for LLMs to understand the Faftech Backend API structure and capabilities.*

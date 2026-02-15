@@ -1,0 +1,9 @@
+
+{
+  "name": "FAFTECH System Dashboard",
+  "description": "A high-end futuristic admin dashboard for managing projects, articles, and system logs with integrated Gemini AI for content generation.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
